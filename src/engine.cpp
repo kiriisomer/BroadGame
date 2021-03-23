@@ -1,5 +1,6 @@
 #include "engine.hpp"
 
+// Engine
 Engine::Engine() {
     iScreenWidth = 480;
     iScreenHeight = 320;
@@ -49,6 +50,7 @@ int Engine::init()
 
     return 0;
 }
+
 int Engine::loop()
 {
 
@@ -98,6 +100,35 @@ void Engine::render()
     glClear(GL_COLOR_BUFFER_BIT);
 
 }
+
+
+// TimeMamager
+TimeManager::TimeManager() 
+{
+    currentFrame = 0.0f;
+    lastFrame = 0.0f;
+    targetFps = 60.0f;        // 目标fps
+}
+
+void TimeManager::start()
+{
+    lastFrame = 0.0f;
+    currentFrame = 0.0f;
+    glfwSetTime(0.0f);
+}
+
+void TimeManager::loop_update()
+{
+    currentFrame = glfwGetTime();
+    lastFrame = currentFrame;
+}
+
+// SceneBase
+SceneBase::SceneBase(Engine* game_engine_obj) :engine(game_engine_obj) {}
+
+SceneBase::~SceneBase() {}
+
+// SpriteRenderer
 
 
 // for glfw callback func

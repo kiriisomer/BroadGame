@@ -32,3 +32,5 @@
 *.app
 
 .Ds_Store
+
+.vscode

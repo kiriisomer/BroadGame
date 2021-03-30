@@ -1,14 +1,26 @@
 #include "engine.hpp"
+#include "scene_base.hpp"
+#include "scene_main.hpp"
 
 // Engine
 Engine::Engine() {
     iScreenWidth = 480;
     iScreenHeight = 320;
     windowTitle = "BroGamer";
+    current_scene = NULL;
+    main_scene = NULL;    
 }
 Engine::~Engine() {}
 
 int Engine::init()
+{
+    this->_init_opengl();
+    main_scene = new MainScene(this);
+    current_scene = main_scene;
+    return 0;
+}
+
+int Engine::_init_opengl()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  
@@ -74,6 +86,11 @@ int Engine::loop()
 
 void Engine::uninit()
 {
+    if (main_scene) {
+        delete main_scene;
+        main_scene = NULL;
+    }
+    // opengl uninit
     glfwTerminate();
 }
 
@@ -84,12 +101,15 @@ void Engine::processInput()
     {
         glfwSetWindowShouldClose(window, true);
     }
+    else {
+        current_scene->deal_event();
+    }
 }
 
 void Engine::update()
 {
-    std::cout<<1;
-    std::cout.flush();
+    current_scene->update();
+    // std::cout<<1; std::cout.flush();
 }
 
 void Engine::render()
@@ -99,34 +119,31 @@ void Engine::render()
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    current_scene->render();
+
 }
 
 
 // TimeMamager
-TimeManager::TimeManager() 
-{
-    currentFrame = 0.0f;
-    lastFrame = 0.0f;
-    targetFps = 60.0f;        // 目标fps
-}
+// TimeManager::TimeManager() 
+// {
+//     currentFrame = 0.0f;
+//     lastFrame = 0.0f;
+//     targetFps = 60.0f;        // 目标fps
+// }
 
-void TimeManager::start()
-{
-    lastFrame = 0.0f;
-    currentFrame = 0.0f;
-    glfwSetTime(0.0f);
-}
+// void TimeManager::start()
+// {
+//     lastFrame = 0.0f;
+//     currentFrame = 0.0f;
+//     glfwSetTime(0.0f);
+// }
 
-void TimeManager::loop_update()
-{
-    currentFrame = glfwGetTime();
-    lastFrame = currentFrame;
-}
-
-// SceneBase
-SceneBase::SceneBase(Engine* game_engine_obj) :engine(game_engine_obj) {}
-
-SceneBase::~SceneBase() {}
+// void TimeManager::loop_update()
+// {
+//     currentFrame = glfwGetTime();
+//     lastFrame = currentFrame;
+// }
 
 // SpriteRenderer
 

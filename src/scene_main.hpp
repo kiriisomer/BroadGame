@@ -1,9 +1,18 @@
 #ifndef SCENE_MAIN_HPP
 #define SCENE_MAIN_HPP
 
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // #include "engine.hpp"
 #include "scene_base.hpp"
+#include "resource_manager.hpp"
+#include "sprite_renderer.hpp"
+
 class Engine;
+class SpriteRenderer;
 // class SceneBase;
 
 
@@ -25,6 +34,9 @@ public:
     int update();
     int render();
 
+    GLuint Width;
+    GLuint Height;
+    SpriteRenderer* Renderer;
 };
 
 #endif

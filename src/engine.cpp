@@ -8,7 +8,7 @@ Engine::Engine() {
     iScreenHeight = 320;
     windowTitle = "BroGamer";
     current_scene = NULL;
-    main_scene = NULL;    
+    main_scene = NULL;
 }
 Engine::~Engine() {}
 
@@ -17,6 +17,7 @@ int Engine::init()
     this->_init_opengl();
     main_scene = new MainScene(this);
     current_scene = main_scene;
+    current_scene->init();
     return 0;
 }
 

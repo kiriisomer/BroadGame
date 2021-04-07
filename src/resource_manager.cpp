@@ -11,15 +11,17 @@ std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 
 
-Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name)
+Shader& ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name)
 {
     Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-    return Shaders[name];
+    Shader& tmp = Shaders[name];
+    return tmp;
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader& ResourceManager::GetShader(std::string name)
 {
-    return Shaders[name];
+    Shader& tmp = Shaders[name];
+    return tmp;
 }
 
 Texture2D ResourceManager::LoadTexture(const GLchar *file, GLboolean alpha, std::string name)
@@ -110,7 +112,7 @@ Texture2D ResourceManager::loadTextureFromFile(const GLchar *img_file_path, GLbo
         std::cout << "Failed to load texture: " << img_file_path << std::endl;
     }
     // 纹理已经绑定了图片，可以释放图片资源了。
-    stbi_image_free(data);
+    stbi_image_free(image_data);
 
     return texture;
 }

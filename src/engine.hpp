@@ -60,15 +60,6 @@ public:
 // };
 
 
-class SpriteRenderer
-{
-    public:
-        SpriteRenderer();
-        ~SpriteRenderer();
-
-};
-
-
 // for glfw callback func
 void framebufferSizeCallback(GLFWwindow *window, int width, int height);
 

@@ -4,8 +4,8 @@
 
 // Engine
 Engine::Engine() {
-    iScreenWidth = 480;
-    iScreenHeight = 320;
+    iScreenWidth = 800;
+    iScreenHeight = 600;
     windowTitle = "BroGamer";
     current_scene = NULL;
     main_scene = NULL;
@@ -88,10 +88,12 @@ int Engine::loop()
 void Engine::uninit()
 {
     if (main_scene) {
+        main_scene->destory();
         delete main_scene;
-        main_scene = NULL;
+        main_scene = nullptr;
     }
     // opengl uninit
+    current_scene=nullptr;
     glfwTerminate();
 }
 
@@ -117,11 +119,11 @@ void Engine::render()
 {
     // draw background
     // ---------------
-    glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     current_scene->render();
-
+    glfwSwapBuffers(window);
 }
 
 

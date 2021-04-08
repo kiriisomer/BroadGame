@@ -51,12 +51,17 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
     std::string vertexCode;
     std::string fragmentCode;
     std::string geometryCode;
+    // Open files
+    std::ifstream vertexShaderFile;
+    std::ifstream fragmentShaderFile;
+    // 设置ifstream对象可以抛出异常：
+    vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    fragmentShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    std::stringstream vShaderStream, fShaderStream;
     try
     {
-        // Open files
-        std::ifstream vertexShaderFile(vShaderFile);
-        std::ifstream fragmentShaderFile(fShaderFile);
-        std::stringstream vShaderStream, fShaderStream;
+        vertexShaderFile.open(vShaderFile);
+        fragmentShaderFile.open(fShaderFile);
         // Read file's buffer contents into streams
         vShaderStream << vertexShaderFile.rdbuf();
         fShaderStream << fragmentShaderFile.rdbuf();

@@ -22,6 +22,8 @@ private:
     // Render state
     Shader shader;
     GLuint quadVAO;
+
+    glm::mat4 model;
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData();
 };

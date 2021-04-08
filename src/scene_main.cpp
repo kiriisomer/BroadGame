@@ -12,6 +12,7 @@ int MainScene::init()
     ResourceManager::LoadShader("shader/sprite.vs", "shader/sprite.frag", nullptr, "sprite");
     
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -10.0f, 10.0f);
+    // glm::mat4 projection = glm::ortho(0.0f, 8.0f, 6.0f, 0.0f, -10.0f, 10.0f);
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     // Load textures
@@ -53,6 +54,7 @@ int MainScene::update()
 
 int MainScene::render()
 {
-    Renderer->DrawSprite(ResourceManager::GetTexture("face"), glm::vec2(300, 300), glm::vec2(400, 400), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    Renderer->DrawSprite(ResourceManager::GetTexture("face"),
+        glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     return 0;
 }

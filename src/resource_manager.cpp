@@ -101,7 +101,7 @@ Texture2D ResourceManager::loadTextureFromFile(const GLchar *img_file_path, GLbo
     // load and generate the texture
     int width, height, nrChannels;
     // 翻转Y轴
-    stbi_set_flip_vertically_on_load(true);
+    // stbi_set_flip_vertically_on_load(true);
     unsigned char *image_data = stbi_load(img_file_path, &width, &height, &nrChannels, 0);
     if (image_data)
     {

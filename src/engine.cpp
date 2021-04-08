@@ -24,7 +24,7 @@ int Engine::init()
 int Engine::_init_opengl()
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -123,7 +123,6 @@ void Engine::render()
     glClear(GL_COLOR_BUFFER_BIT);
 
     current_scene->render();
-    glfwSwapBuffers(window);
 }
 
 

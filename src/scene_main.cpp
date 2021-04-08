@@ -2,7 +2,9 @@
 #include "engine.hpp"
 #include "scene_main.hpp"
 
-MainScene::MainScene(Engine* game_engine_obj) : SceneBase(game_engine_obj) {}
+MainScene::MainScene(Engine* game_engine_obj) : SceneBase(game_engine_obj) {
+    Renderer = NULL;
+}
 
 int MainScene::init()
 {
@@ -22,6 +24,15 @@ int MainScene::init()
     return 0;
 }
 
+void MainScene::destory()
+{
+    if(Renderer)
+    {
+        delete Renderer;
+        Renderer = NULL;
+    }
+}
+
 int MainScene::start()
 {
     return 0;
@@ -35,11 +46,6 @@ int MainScene::pause()
 int MainScene::restart()
 {
     return 0;
-}
-
-void MainScene::destory()
-{
-    delete Renderer;
 }
 
 int MainScene::deal_event()

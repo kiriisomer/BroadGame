@@ -2,11 +2,11 @@ src_path = src
 build_path = build
 output_file_name = $(build_path)/a.out
 
-build:  $(src_path)/engine.o $(src_path)/glad.o $(src_path)/main.o \
-		$(src_path)/resource_manager.o $(src_path)/scene_base.o \
-		$(src_path)/scene_main.o $(src_path)/shader.o \
-		$(src_path)/sprite_renderer.o $(src_path)/stb_image.o \
-		$(src_path)/texture.o
+build:  $(build_path)/engine.o $(build_path)/glad.o $(build_path)/main.o \
+		$(build_path)/resource_manager.o $(build_path)/scene_base.o \
+		$(build_path)/scene_main.o $(build_path)/shader.o \
+		$(build_path)/sprite_renderer.o $(build_path)/stb_image.o \
+		$(build_path)/texture.o
 	clang++ -g \
 		$(build_path)/engine.o \
 		$(build_path)/glad.o \
@@ -21,25 +21,25 @@ build:  $(src_path)/engine.o $(src_path)/glad.o $(src_path)/main.o \
 		-lglfw \
 		-o $(output_file_name)
 
-$(src_path)/engine.o: $(src_path)/engine.cpp
+$(build_path)/engine.o: $(src_path)/engine.cpp
 	clang++ -g -c -x c++ $(src_path)/engine.cpp -o $(build_path)/engine.o
-$(src_path)/glad.o: $(src_path)/glad.c
+$(build_path)/glad.o: $(src_path)/glad.c
 	clang++ -g -c -x c $(src_path)/glad.c -o $(build_path)/glad.o
-$(src_path)/main.o: $(src_path)/main.cpp
+$(build_path)/main.o: $(src_path)/main.cpp
 	clang++ -g -c -x c++ $(src_path)/main.cpp -o $(build_path)/main.o
-$(src_path)/resource_manager.o: $(src_path)/resource_manager.cpp
+$(build_path)/resource_manager.o: $(src_path)/resource_manager.cpp
 	clang++ -g -c -x c++ -std=c++11 $(src_path)/resource_manager.cpp -o $(build_path)/resource_manager.o
-$(src_path)/scene_base.o: $(src_path)/scene_base.cpp
+$(build_path)/scene_base.o: $(src_path)/scene_base.cpp
 	clang++ -g -c -x c++ $(src_path)/scene_base.cpp -o $(build_path)/scene_base.o
-$(src_path)/scene_main.o: $(src_path)/scene_main.cpp
+$(build_path)/scene_main.o: $(src_path)/scene_main.cpp
 	clang++ -g -c -x c++ $(src_path)/scene_main.cpp -o $(build_path)/scene_main.o
-$(src_path)/shader.o: $(src_path)/shader.cpp
+$(build_path)/shader.o: $(src_path)/shader.cpp
 	clang++ -g -c -x c++ $(src_path)/shader.cpp -o $(build_path)/shader.o
-$(src_path)/sprite_renderer.o: $(src_path)/sprite_renderer.cpp
+$(build_path)/sprite_renderer.o: $(src_path)/sprite_renderer.cpp
 	clang++ -g -c -x c++ $(src_path)/sprite_renderer.cpp -o $(build_path)/sprite_renderer.o
-$(src_path)/stb_image.o: $(src_path)/stb_image.cpp
+$(build_path)/stb_image.o: $(src_path)/stb_image.cpp
 	clang++ -g -c -x c++ $(src_path)/stb_image.cpp -o $(build_path)/stb_image.o
-$(src_path)/texture.o: $(src_path)/texture.cpp
+$(build_path)/texture.o: $(src_path)/texture.cpp
 	clang++ -g -c -x c++ $(src_path)/texture.cpp -o $(build_path)/texture.o
 
 clean:

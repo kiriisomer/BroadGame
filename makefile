@@ -6,7 +6,8 @@ build:  $(build_path)/engine.o $(build_path)/glad.o $(build_path)/main.o \
 		$(build_path)/resource_manager.o $(build_path)/scene_base.o \
 		$(build_path)/scene_main.o $(build_path)/shader.o \
 		$(build_path)/sprite_renderer.o $(build_path)/stb_image.o \
-		$(build_path)/texture.o
+		$(build_path)/texture.o $(build_path)/game_object.o \
+		$(build_path)/game_level.o
 	clang++ -g \
 		$(build_path)/engine.o \
 		$(build_path)/glad.o \
@@ -18,6 +19,8 @@ build:  $(build_path)/engine.o $(build_path)/glad.o $(build_path)/main.o \
 		$(build_path)/sprite_renderer.o \
 		$(build_path)/stb_image.o \
 		$(build_path)/texture.o \
+		$(build_path)/game_object.o \
+		$(build_path)/game_level.o \
 		-lglfw \
 		-o $(output_file_name)
 
@@ -41,6 +44,12 @@ $(build_path)/stb_image.o: $(src_path)/stb_image.cpp
 	clang++ -g -c -x c++ $(src_path)/stb_image.cpp -o $(build_path)/stb_image.o
 $(build_path)/texture.o: $(src_path)/texture.cpp
 	clang++ -g -c -x c++ $(src_path)/texture.cpp -o $(build_path)/texture.o
+
+$(build_path)/game_object.o: $(src_path)/game_object.cpp
+	clang++ -g -c -x c++ $(src_path)/game_object.cpp -o $(build_path)/game_object.o
+$(build_path)/game_level.o: $(src_path)/game_level.cpp
+	clang++ -g -c -x c++ -std=c++11 $(src_path)/game_level.cpp -o $(build_path)/game_level.o
+
 
 clean:
 	rm $(output_file_name)

@@ -1,7 +1,7 @@
 #ifndef SCENE_MAIN_HPP
 #define SCENE_MAIN_HPP
 
-
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,8 +13,7 @@
 
 class Engine;
 class SpriteRenderer;
-// class SceneBase;
-
+class GameLevel;
 
 class MainScene: public SceneBase
 {
@@ -37,6 +36,9 @@ public:
     GLuint Width;
     GLuint Height;
     SpriteRenderer* Renderer;
+
+    std::vector<GameLevel> Levels;
+    GLuint Level;
 };
 
 #endif

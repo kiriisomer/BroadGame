@@ -11,9 +11,18 @@
 #include "resource_manager.hpp"
 #include "sprite_renderer.hpp"
 
+#include "game_level.hpp"
+
 class Engine;
 class SpriteRenderer;
-class GameLevel;
+// class GameLevel;
+class GameObject;
+
+
+// 初始化挡板的大小
+const glm::vec2 PLAYER_SIZE(100, 20);
+// 初始化当班的速率
+const GLfloat PLAYER_VELOCITY(500.0f);
 
 class MainScene: public SceneBase
 {
@@ -29,8 +38,8 @@ public:
     int restart();
     void destory();
 
-    int deal_event();
-    int update();
+    int processInput();
+    int update(GLfloat dt);
     int render();
 
     GLuint Width;
@@ -39,6 +48,8 @@ public:
 
     std::vector<GameLevel> Levels;
     GLuint Level;
+
+    GameObject *Player;
 };
 
 #endif

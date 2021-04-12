@@ -1,7 +1,7 @@
 
 #include "engine.hpp"
 #include "scene_main.hpp"
-#include "game_level.hpp"
+#include "game_object.hpp"
 
 MainScene::MainScene(Engine* game_engine_obj) : SceneBase(game_engine_obj) {
     Renderer = NULL;
@@ -23,6 +23,7 @@ int MainScene::init()
     ResourceManager::LoadTexture("texture/face.png", GL_TRUE, "face");
     ResourceManager::LoadTexture("texture/block.png", GL_TRUE, "block");
     ResourceManager::LoadTexture("texture/block_solid.png", GL_TRUE, "block_solid");
+    ResourceManager::LoadTexture("texture/paddle.png", GL_TRUE, "paddle");
     // Set render-specific controls
     Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -40,6 +41,13 @@ int MainScene::init()
     four.Load("res/level/level4.txt", this->Width, this->Height * 0.5);
     this->Levels.push_back(four);
 
+    // player paddle info
+    glm::vec2 playerPos = glm::vec2(
+        this->Width / 2 - PLAYER_SIZE.x / 2, 
+        this->Height - PLAYER_SIZE.y
+    );
+    Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
+
     return 0;
 }
 
@@ -49,6 +57,11 @@ void MainScene::destory()
     {
         delete Renderer;
         Renderer = NULL;
+    }
+    if(Player)
+    {
+        delete Player;
+        Player = NULL;
     }
 }
 
@@ -67,13 +80,25 @@ int MainScene::restart()
     return 0;
 }
 
-int MainScene::deal_event()
+int MainScene::processInput()
 {
     return 0;
 }
 
-int MainScene::update()
+int MainScene::update(GLfloat dt)
 {
+    GLfloat velocity = PLAYER_VELOCITY * dt;
+    // // 移动挡板
+    // if (this->Keys[GLFW_KEY_A])
+    // {
+    //     if (Player->Position.x >= 0)
+    //         Player->Position.x -= velocity;
+    // }
+    // if (this->Keys[GLFW_KEY_D])
+    // {
+    //     if (Player->Position.x <= this->Width - Player->Size.x)
+    //         Player->Position.x += velocity;
+    // }
     return 0;
 }
 
@@ -82,5 +107,6 @@ int MainScene::render()
     Renderer->DrawSprite(ResourceManager::GetTexture("face"),
         glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     this->Levels[this->Level].Draw(*Renderer);
+    Player->Draw(*Renderer);
     return 0;
 }

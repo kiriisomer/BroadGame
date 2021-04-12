@@ -66,18 +66,25 @@ int Engine::_init_opengl()
 
 int Engine::loop()
 {
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
 
     while (!glfwWindowShouldClose(this->window))
     {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        glfwPollEvents();
+
         // deal input
         // ----------
         this->processInput();
-        this->update();
+        this->update(deltaTime);
         this->render();
 
         // glfw: swap buffers
         // ------------------
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(this->window);
         // glfw: poll events
         // -----------------
         glfwPollEvents();
@@ -97,21 +104,25 @@ void Engine::uninit()
     glfwTerminate();
 }
 
+int Engine::getKeyStatus(const int key) {
+    return glfwGetKey(this->window, key);
+}
+
 void Engine::processInput()
 {
     // 按ESC按键退出
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
-        glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(this->window, true);
     }
     else {
-        current_scene->deal_event();
+        current_scene->processInput();
     }
 }
 
-void Engine::update()
+void Engine::update(GLfloat dt)
 {
-    current_scene->update();
+    current_scene->update(dt);
     // std::cout<<1; std::cout.flush();
 }
 

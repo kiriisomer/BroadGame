@@ -9,8 +9,6 @@
 #include <string>
 // #include <functional> // std::bind
 
-// #include "scene_base.hpp"
-// #include "scene_main.hpp"
 class SceneBase;
 class MainScene;
 
@@ -24,7 +22,7 @@ public:
     GLFWwindow* window;
 
     // scenes
-	SceneBase* current_scene;
+    SceneBase* current_scene;
     MainScene* main_scene;
 
 public:
@@ -39,8 +37,11 @@ public:
     // in main loop process input
     void processInput();
     // in main loop update sprites
-    void update();
+    void update(GLfloat dt);
     void render();
+
+    // 
+    int getKeyStatus(int key);
 };
 
 

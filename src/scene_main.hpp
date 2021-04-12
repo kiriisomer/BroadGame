@@ -2,6 +2,7 @@
 #define SCENE_MAIN_HPP
 
 #include <vector>
+#include <map>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -27,8 +28,8 @@ const GLfloat PLAYER_VELOCITY(500.0f);
 class MainScene: public SceneBase
 {
 public:
-	MainScene(Engine* game_engine_obj);
-	~MainScene(){
+    MainScene(Engine* game_engine_obj);
+    ~MainScene(){
         this->destory();
     }
 
@@ -45,6 +46,8 @@ public:
     GLuint Width;
     GLuint Height;
     SpriteRenderer* Renderer;
+
+    std::map<int, int> KeyStatus;
 
     std::vector<GameLevel> Levels;
     GLuint Level;

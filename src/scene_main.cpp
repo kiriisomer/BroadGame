@@ -48,6 +48,10 @@ int MainScene::init()
     );
     Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
 
+    // key press info
+    KeyStatus[GLFW_KEY_A] = GLFW_RELEASE;
+    KeyStatus[GLFW_KEY_D] = GLFW_RELEASE;
+
     return 0;
 }
 
@@ -82,23 +86,27 @@ int MainScene::restart()
 
 int MainScene::processInput()
 {
+    KeyStatus[GLFW_KEY_A] = this->getKeyStatus(GLFW_KEY_A);
+    KeyStatus[GLFW_KEY_D] = this->getKeyStatus(GLFW_KEY_D);
     return 0;
 }
 
 int MainScene::update(GLfloat dt)
 {
     GLfloat velocity = PLAYER_VELOCITY * dt;
-    // // 移动挡板
-    // if (this->Keys[GLFW_KEY_A])
-    // {
-    //     if (Player->Position.x >= 0)
-    //         Player->Position.x -= velocity;
-    // }
-    // if (this->Keys[GLFW_KEY_D])
-    // {
-    //     if (Player->Position.x <= this->Width - Player->Size.x)
-    //         Player->Position.x += velocity;
-    // }
+    // move the panel
+    if (this->KeyStatus[GLFW_KEY_A] == GLFW_PRESS && \
+        this->KeyStatus[GLFW_KEY_D] == GLFW_RELEASE)
+    {
+        if (Player->Position.x >= 0)
+            Player->Position.x -= velocity;
+    }
+    else if (this->KeyStatus[GLFW_KEY_D] == GLFW_PRESS && \
+        this->KeyStatus[GLFW_KEY_A] == GLFW_RELEASE)
+    {
+        if (Player->Position.x <= this->Width - Player->Size.x)
+            Player->Position.x += velocity;
+    }
     return 0;
 }
 

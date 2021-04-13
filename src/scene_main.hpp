@@ -20,10 +20,15 @@ class SpriteRenderer;
 class GameObject;
 
 
-// 初始化挡板的大小
+// initial panel size
 const glm::vec2 PLAYER_SIZE(100, 20);
-// 初始化当班的速率
+// initial panel move speed
 const GLfloat PLAYER_VELOCITY(500.0f);
+// initial ball speed(x, y)
+const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
+// initial ball radius
+const GLfloat BALL_RADIUS = 12.5f;
+
 
 class MainScene: public SceneBase
 {
@@ -53,6 +58,7 @@ public:
     GLuint Level;
 
     GameObject *Player;
+    BallObject *Ball;
 };
 
 #endif

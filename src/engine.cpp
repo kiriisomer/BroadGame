@@ -74,7 +74,6 @@ int Engine::loop()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        glfwPollEvents();
 
         // deal input
         // ----------

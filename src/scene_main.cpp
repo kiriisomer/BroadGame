@@ -3,7 +3,8 @@
 #include "scene_main.hpp"
 #include "game_object.hpp"
 
-MainScene::MainScene(Engine* game_engine_obj) : SceneBase(game_engine_obj) {
+MainScene::MainScene(Engine *game_engine_obj) : SceneBase(game_engine_obj)
+{
     Renderer = NULL;
     this->Level = 0;
 }
@@ -14,8 +15,9 @@ int MainScene::init()
     Height = engine->iScreenHeight;
     // Load shaders
     ResourceManager::LoadShader("shader/sprite.vs", "shader/sprite.frag", nullptr, "sprite");
-    
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -10.0f, 10.0f);
+
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), 
+        static_cast<GLfloat>(this->Height), 0.0f, -10.0f, 10.0f);
     // glm::mat4 projection = glm::ortho(0.0f, 8.0f, 6.0f, 0.0f, -10.0f, 10.0f);
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
@@ -43,10 +45,15 @@ int MainScene::init()
 
     // player paddle info
     glm::vec2 playerPos = glm::vec2(
-        this->Width / 2 - PLAYER_SIZE.x / 2, 
-        this->Height - PLAYER_SIZE.y
-    );
-    Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
+        this->Width / 2 - PLAYER_SIZE.x / 2,
+        this->Height - PLAYER_SIZE.y);
+    glm::vec2 ballPos = playerPos + glm::vec2(
+                                        PLAYER_SIZE.x / 2 - BALL_RADIUS,
+                                        -BALL_RADIUS * 2);
+    Player = new GameObject(playerPos, PLAYER_SIZE,
+                            ResourceManager::GetTexture("paddle"));
+    Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY,
+                          ResourceManager::GetTexture("face"));
 
     // key press info
     KeyStatus[GLFW_KEY_A] = GLFW_RELEASE;
@@ -57,15 +64,20 @@ int MainScene::init()
 
 void MainScene::destory()
 {
-    if(Renderer)
+    if (Renderer)
     {
         delete Renderer;
         Renderer = NULL;
     }
-    if(Player)
+    if (Player)
     {
         delete Player;
         Player = NULL;
+    }
+    if (Ball)
+    {
+        delete Ball;
+        Ball = NULL;
     }
 }
 
@@ -86,6 +98,7 @@ int MainScene::restart()
 
 int MainScene::processInput()
 {
+    KeyStatus[GLFW_KEY_SPACE] = this->getKeyStatus(GLFW_KEY_SPACE);
     KeyStatus[GLFW_KEY_A] = this->getKeyStatus(GLFW_KEY_A);
     KeyStatus[GLFW_KEY_D] = this->getKeyStatus(GLFW_KEY_D);
     return 0;
@@ -94,27 +107,42 @@ int MainScene::processInput()
 int MainScene::update(GLfloat dt)
 {
     GLfloat velocity = PLAYER_VELOCITY * dt;
+    Ball->Move(dt, this->Width);
     // move the panel
-    if (this->KeyStatus[GLFW_KEY_A] == GLFW_PRESS && \
+    if (this->KeyStatus[GLFW_KEY_A] == GLFW_PRESS &&
         this->KeyStatus[GLFW_KEY_D] == GLFW_RELEASE)
     {
         if (Player->Position.x >= 0)
+        {
             Player->Position.x -= velocity;
+            if (Ball->isStuck)
+                Ball->Position.x -= velocity;
+        }
     }
-    else if (this->KeyStatus[GLFW_KEY_D] == GLFW_PRESS && \
-        this->KeyStatus[GLFW_KEY_A] == GLFW_RELEASE)
+    else if (this->KeyStatus[GLFW_KEY_D] == GLFW_PRESS &&
+             this->KeyStatus[GLFW_KEY_A] == GLFW_RELEASE)
     {
         if (Player->Position.x <= this->Width - Player->Size.x)
+        {
             Player->Position.x += velocity;
+            if (Ball->isStuck)
+                Ball->Position.x += velocity;
+        }
     }
+
+    if (this->KeyStatus[GLFW_KEY_SPACE])
+        Ball->isStuck = false;
+
     return 0;
 }
 
 int MainScene::render()
 {
-    Renderer->DrawSprite(ResourceManager::GetTexture("face"),
-        glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    // Renderer->DrawSprite(ResourceManager::GetTexture("face"),
+    //                      glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 
+    //                      45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     this->Levels[this->Level].Draw(*Renderer);
     Player->Draw(*Renderer);
+    Ball->Draw(*Renderer);
     return 0;
 }

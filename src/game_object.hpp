@@ -31,4 +31,19 @@ public:
     virtual void Draw(SpriteRenderer &renderer);
 };
 
+class BallObject: public GameObject
+{
+public:
+    // status
+    GLfloat Radius;         // ball's radius
+    GLboolean isStuck;      // is stuck on the panel
+
+    BallObject();
+    BallObject(glm::vec2 pos, GLfloat radius, glm::vec2 velocity, Texture2D sprite);
+
+    glm::vec2 Move(GLfloat dt, GLuint window_width);
+    // resets the ball to original state with given position and velocity
+    void Reset(glm::vec2 position, glm::vec2 velocity);
+};
+
 #endif

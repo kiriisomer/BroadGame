@@ -134,6 +134,12 @@ int MainScene::update(GLfloat dt)
     if (this->KeyStatus[GLFW_KEY_SPACE])
         Ball->isStuck = false;
 
+    if (Ball->Position.y >= this->Height +20.0f)
+    {
+        // this->ResetLevel();
+        this->ResetPlayerAndBall();
+    }
+
     return 0;
 }
 

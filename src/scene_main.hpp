@@ -48,6 +48,10 @@ public:
     int update(GLfloat dt);
     int render();
 
+    void DoCollisions();    // deal collide event
+    void ResetLevel();
+    void ResetPlayerAndBall();
+
     GLuint Width;
     GLuint Height;
     SpriteRenderer* Renderer;

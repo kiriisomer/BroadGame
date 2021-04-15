@@ -9,6 +9,25 @@
 // Container object for holding all state relevant for a single
 // game object entity. Each object in the game likely needs the
 // minimal of state as described within GameObject.
+
+// Represents the current state of the game
+enum GameState {
+    GAME_ACTIVE,
+    GAME_MENU,
+    GAME_WIN
+};
+
+// Represents the four possible (collision) directions
+enum Direction {
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
+};
+
+// Defines a Collision typedef that represents collision data
+typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
+
 class GameObject
 {
 public:
@@ -24,8 +43,8 @@ public:
     // Constructor(s)
     GameObject();
     GameObject(glm::vec2 pos, glm::vec2 size, 
-        Texture2D sprite, 
-        glm::vec3 color = glm::vec3(1.0f), 
+        Texture2D sprite,
+        glm::vec3 color = glm::vec3(1.0f),
         glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
     // Draw sprite
     virtual void Draw(SpriteRenderer &renderer);
@@ -45,5 +64,10 @@ public:
     // resets the ball to original state with given position and velocity
     void Reset(glm::vec2 position, glm::vec2 velocity);
 };
+
+
+GLboolean CheckCollision(GameObject &one, GameObject &two);
+Collision CheckBallCollision(BallObject &one, GameObject &two);
+Direction VectorDirection(glm::vec2 target);
 
 #endif

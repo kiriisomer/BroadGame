@@ -11,6 +11,7 @@
 #include "scene_base.hpp"
 #include "resource_manager.hpp"
 #include "sprite_renderer.hpp"
+#include "particle_generator.hpp"
 
 #include "game_level.hpp"
 
@@ -55,6 +56,7 @@ public:
     GLuint Width;
     GLuint Height;
     SpriteRenderer* Renderer;
+    ParticleGenerator* Particles;
 
     std::map<int, int> KeyStatus;
 

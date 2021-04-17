@@ -15,17 +15,23 @@ int MainScene::init()
     Height = engine->iScreenHeight;
     // Load shaders
     ResourceManager::LoadShader("shader/sprite.vs", "shader/sprite.frag", nullptr, "sprite");
+    ResourceManager::LoadShader("shader/particle.vs", "shader/particle.frag", nullptr, "particle");
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), 
         static_cast<GLfloat>(this->Height), 0.0f, -10.0f, 10.0f);
     // glm::mat4 projection = glm::ortho(0.0f, 8.0f, 6.0f, 0.0f, -10.0f, 10.0f);
-    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+    ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+    ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
+    ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
     // Load textures
-    ResourceManager::LoadTexture("texture/face.png", GL_TRUE, "face");
-    ResourceManager::LoadTexture("texture/block.png", GL_TRUE, "block");
-    ResourceManager::LoadTexture("texture/block_solid.png", GL_TRUE, "block_solid");
-    ResourceManager::LoadTexture("texture/paddle.png", GL_TRUE, "paddle");
+    ResourceManager::LoadTexture("res/texture/face.png", GL_TRUE, "face");
+    ResourceManager::LoadTexture("res/texture/block.png", GL_TRUE, "block");
+    ResourceManager::LoadTexture("res/texture/block_solid.png", GL_TRUE, "block_solid");
+    ResourceManager::LoadTexture("res/texture/paddle.png", GL_TRUE, "paddle");
+    ResourceManager::LoadTexture("res/texture/particle.png", GL_TRUE, "particle");
+
+
     // Set render-specific controls
     Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -59,6 +65,13 @@ int MainScene::init()
     KeyStatus[GLFW_KEY_A] = GLFW_RELEASE;
     KeyStatus[GLFW_KEY_D] = GLFW_RELEASE;
 
+    // particle
+    Particles = new ParticleGenerator(
+        ResourceManager::GetShader("particle"), 
+        ResourceManager::GetTexture("face"), 
+        5000
+    );
+
     return 0;
 }
 
@@ -78,6 +91,11 @@ void MainScene::destory()
     {
         delete Ball;
         Ball = NULL;
+    }
+    if (Particles)
+    {
+        delete Particles;
+        Particles = NULL;
     }
 }
 
@@ -140,6 +158,9 @@ int MainScene::update(GLfloat dt)
         this->ResetPlayerAndBall();
     }
 
+    // Update particles
+    Particles->Update(dt, *Ball, 5, glm::vec2(Ball->Radius / 2));
+
     return 0;
 }
 
@@ -150,6 +171,7 @@ int MainScene::render()
     //                      45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     this->Levels[this->Level].Draw(*Renderer);
     Player->Draw(*Renderer);
+    Particles->Draw();
     Ball->Draw(*Renderer);
     return 0;
 }

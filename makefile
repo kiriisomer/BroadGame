@@ -11,7 +11,8 @@ build:  $(build_path)/engine.o $(build_path)/glad.o $(build_path)/main.o \
 		$(build_path)/sprite_renderer.o $(build_path)/stb_image.o \
 		$(build_path)/texture.o $(build_path)/game_object.o \
 		$(build_path)/game_level.o \
-		$(build_path)/particle_generator.o
+		$(build_path)/particle_generator.o \
+		$(build_path)/post_processor.o
 	$(ld) \
 		$(build_path)/engine.o \
 		$(build_path)/glad.o \
@@ -26,6 +27,7 @@ build:  $(build_path)/engine.o $(build_path)/glad.o $(build_path)/main.o \
 		$(build_path)/game_object.o \
 		$(build_path)/game_level.o \
 		$(build_path)/particle_generator.o \
+		$(build_path)/post_processor.o \
 		-lglfw \
 		-o $(output_file_name)
 
@@ -57,6 +59,8 @@ $(build_path)/game_level.o: $(src_path)/game_level.cpp
 
 $(build_path)/particle_generator.o: $(src_path)/particle_generator.cpp
 	$(cc11) -c -x c++ $(src_path)/particle_generator.cpp -o $(build_path)/particle_generator.o
+$(build_path)/post_processor.o: $(src_path)/post_processor.cpp
+	$(cc11) -c -x c++ $(src_path)/post_processor.cpp -o $(build_path)/post_processor.o
 
 
 clean:

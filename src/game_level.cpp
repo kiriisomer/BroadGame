@@ -54,7 +54,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int> > tileData,
                 obj.IsSolid = true;
                 this->Bricks.push_back(obj);
             }
-            else if (tileData[y][x] > 1)	
+            else if (tileData[y][x] > 1)
             {
                 glm::vec3 color = glm::vec3(1.0f); // original: white
                 if (tileData[y][x] == 2)
@@ -73,7 +73,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int> > tileData,
                 );
             }
         }
-    }  
+    }
 }
 
 void GameLevel::Draw(SpriteRenderer &renderer)

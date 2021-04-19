@@ -16,6 +16,7 @@ int MainScene::init()
     // Load shaders
     ResourceManager::LoadShader("shader/sprite.vs", "shader/sprite.frag", nullptr, "sprite");
     ResourceManager::LoadShader("shader/particle.vs", "shader/particle.frag", nullptr, "particle");
+    ResourceManager::LoadShader("shader/post_processing.vs", "shader/post_processing.frag", nullptr, "postprocessing");
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), 
         static_cast<GLfloat>(this->Height), 0.0f, -10.0f, 10.0f);
@@ -34,7 +35,15 @@ int MainScene::init()
 
     // Set render-specific controls
     Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
-
+    // particle
+    Particles = new ParticleGenerator(
+        ResourceManager::GetShader("particle"), 
+        ResourceManager::GetTexture("face"), 
+        5000
+    );
+    Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), 
+        this->Width, this->Height);
+    
     // load Levels
     GameLevel one;
     one.Load("res/level/level1.txt", this->Width, this->Height * 0.5);
@@ -65,13 +74,6 @@ int MainScene::init()
     KeyStatus[GLFW_KEY_A] = GLFW_RELEASE;
     KeyStatus[GLFW_KEY_D] = GLFW_RELEASE;
 
-    // particle
-    Particles = new ParticleGenerator(
-        ResourceManager::GetShader("particle"), 
-        ResourceManager::GetTexture("face"), 
-        5000
-    );
-
     return 0;
 }
 
@@ -96,6 +98,11 @@ void MainScene::destory()
     {
         delete Particles;
         Particles = NULL;
+    }
+    if (Effects)
+    {
+        delete Effects;
+        Effects = NULL;
     }
 }
 
@@ -159,20 +166,31 @@ int MainScene::update(GLfloat dt)
     }
 
     // Update particles
-    Particles->Update(dt, *Ball, 5, glm::vec2(Ball->Radius / 2));
+    Particles->Update(dt, *Ball, 1, glm::vec2(Ball->Radius / 2));
+    // reduce shake time
+    if (ShakeTime > 0.0f)
+    {
+        ShakeTime -= dt;
+        if (ShakeTime <= 0.0f)
+            Effects->Shake = GL_FALSE;
+    }
 
     return 0;
 }
 
 int MainScene::render()
 {
-    // Renderer->DrawSprite(ResourceManager::GetTexture("face"),
-    //                      glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 
-    //                      45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    this->Levels[this->Level].Draw(*Renderer);
-    Player->Draw(*Renderer);
-    Particles->Draw();
-    Ball->Draw(*Renderer);
+
+    Effects->BeginRender();
+        // Renderer->DrawSprite(ResourceManager::GetTexture("face"),
+        //                      glm::vec2(350.0f, 250.0f), glm::vec2(100.0f, 100.0f), 
+        //                      45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+        this->Levels[this->Level].Draw(*Renderer);
+        Player->Draw(*Renderer);
+        Particles->Draw();
+        Ball->Draw(*Renderer);
+    Effects->EndRender();
+    Effects->Render(glfwGetTime());
     return 0;
 }
 
@@ -188,6 +206,11 @@ void MainScene::DoCollisions()
                 // Destroy block if not solid
                 if (!box.IsSolid)
                     box.Destroyed = GL_TRUE;
+                else
+                {
+                    ShakeTime = 0.05f;
+                    Effects->Shake = GL_TRUE;
+                }
                 // Collision resolution
                 Direction dir = std::get<1>(collision);
                 glm::vec2 diff_vector = std::get<2>(collision);

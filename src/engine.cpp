@@ -163,7 +163,7 @@ void Engine::render()
 // for glfw callback func
 void framebufferSizeCallback(GLFWwindow *window, int width, int height)
 {
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, width*2, height*2);
 }
 
 // glfw error callback func

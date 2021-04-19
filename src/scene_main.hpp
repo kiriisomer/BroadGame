@@ -12,6 +12,7 @@
 #include "resource_manager.hpp"
 #include "sprite_renderer.hpp"
 #include "particle_generator.hpp"
+#include "post_processor.hpp"
 
 #include "game_level.hpp"
 
@@ -57,11 +58,14 @@ public:
     GLuint Height;
     SpriteRenderer* Renderer;
     ParticleGenerator* Particles;
+    PostProcessor* Effects;
 
     std::map<int, int> KeyStatus;
 
     std::vector<GameLevel> Levels;
     GLuint Level;
+
+    GLfloat ShakeTime;   //  for post_processor
 
     GameObject *Player;
     BallObject *Ball;

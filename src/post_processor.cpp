@@ -69,17 +69,17 @@ PostProcessor::PostProcessor(Shader shader, GLuint width, GLuint height)
 
 void PostProcessor::BeginRender()
 {
-    // glBindFramebuffer(GL_FRAMEBUFFER, this->MSFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->MSFBO);
+    // glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 void PostProcessor::EndRender()
 {
     // Now resolve multisampled color-buffer into intermediate FBO to store to texture
-    // glBindFramebuffer(GL_READ_FRAMEBUFFER, this->MSFBO);
-    // glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->FBO);
-    // glBlitFramebuffer(0, 0, this->Width*2, this->Height*2, 0, 0, this->Width*2, this->Height*2, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, this->MSFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->FBO);
+    glBlitFramebuffer(0, 0, this->Width*2, this->Height*2, 0, 0, this->Width*2, this->Height*2, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0); // Binds both READ and WRITE framebuffer to default framebuffer
 }
 
@@ -91,7 +91,7 @@ void PostProcessor::Render(GLfloat time)
     this->PostProcessingShader.SetInteger("confuse", this->Confuse);
     this->PostProcessingShader.SetInteger("chaos", this->Chaos);
     this->PostProcessingShader.SetInteger("shake", this->Shake);
-    glViewport(0,0,800*2,600*2);
+    // glViewport(0, 0, this->Width*2, this->Height*2);
     // Render textured quad
     glActiveTexture(GL_TEXTURE0);
     this->Texture.Bind();

@@ -126,6 +126,9 @@ int MainScene::processInput()
     KeyStatus[GLFW_KEY_SPACE] = this->getKeyStatus(GLFW_KEY_SPACE);
     KeyStatus[GLFW_KEY_A] = this->getKeyStatus(GLFW_KEY_A);
     KeyStatus[GLFW_KEY_D] = this->getKeyStatus(GLFW_KEY_D);
+    KeyStatus[GLFW_KEY_U] = this->getKeyStatus(GLFW_KEY_U);
+    KeyStatus[GLFW_KEY_I] = this->getKeyStatus(GLFW_KEY_I);
+    KeyStatus[GLFW_KEY_O] = this->getKeyStatus(GLFW_KEY_O);
     return 0;
 }
 
@@ -158,6 +161,24 @@ int MainScene::update(GLfloat dt)
 
     if (this->KeyStatus[GLFW_KEY_SPACE])
         Ball->isStuck = false;
+
+    // effect switch
+    if (this->KeyStatus[GLFW_KEY_U])
+    {    
+        Effects->Chaos = true;
+        Effects->Confuse = false;
+    }
+    else if (this->KeyStatus[GLFW_KEY_I])
+    {
+        Effects->Chaos = false;
+        Effects->Confuse = true;
+    }
+    else if (this->KeyStatus[GLFW_KEY_O])
+    {
+        Effects->Chaos = false;
+        Effects->Confuse = false;
+    }
+
 
     if (Ball->Position.y >= this->Height +20.0f)
     {

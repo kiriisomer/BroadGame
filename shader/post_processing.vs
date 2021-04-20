@@ -16,13 +16,17 @@ void main()
     
     if(chaos)
     {
-        float strength = 0.3;
-        vec2 pos = vec2(texture.x + sin(time) * strength, texture.y + cos(time) * strength);        
+        float strength = 0.2f;
+        vec2 pos = vec2( (texture.x*2-1.0) + sin(time) * strength, (texture.y*2-1.0) + cos(time) * strength);
+        
+        // vec2 pos = vec2((texture.xy * 2) -1.0);
         TexCoords = pos;
+        gl_Position.xy = pos;
     }
     else if(confuse)
     {
         TexCoords = vec2(1.0 - texture.x, 1.0 - texture.y);
+        gl_Position.y = -gl_Position.y;
     }
     else
     {

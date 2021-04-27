@@ -6,6 +6,8 @@
 Engine::Engine() {
     iScreenWidth = 800;
     iScreenHeight = 600;
+    iFrameWidth = 800;
+    iFrameHeight = 600;
     windowTitle = "BroGamer";
     current_scene = NULL;
     main_scene = NULL;
@@ -53,6 +55,9 @@ int Engine::_init_opengl()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+    // get glfw frame size
+    glfwGetFramebufferSize(window, &iFrameWidth, &iFrameHeight);
 
     // 要应用透明纹理，首先我们启用2D纹理
     glEnable(GL_TEXTURE_2D);
@@ -161,14 +166,12 @@ void Engine::render()
 
 
 // for glfw callback func
-void framebufferSizeCallback(GLFWwindow *window, int width, int height)
+void framebufferSizeCallback(GLFWwindow *window, int width, int height) 
 {
     // glViewport(0, 0, width*2, height*2);
-    GLint x = 0;
-    GLint y = 0;
-    GLint mywidth = 800*2;
-    GLint myheight = 600*2;
-    glViewport(x, y, mywidth, myheight);
+    int frame_width, frame_height;
+    glfwGetFramebufferSize(window, &frame_width, &frame_height);
+    glViewport(0, 0, frame_width, frame_height);
 }
 
 // glfw error callback func

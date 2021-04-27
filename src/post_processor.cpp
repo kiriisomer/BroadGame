@@ -23,14 +23,14 @@ PostProcessor::PostProcessor(Shader shader, GLuint width, GLuint height)
     // Initialize renderbuffer storage with a multisampled color buffer (don't need a depth/stencil buffer)
     glBindFramebuffer(GL_FRAMEBUFFER, this->MSFBO);
     glBindRenderbuffer(GL_RENDERBUFFER, this->RBO);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_RGB, width*2, height*2); // Allocate storage for render buffer object
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_RGB, width, height); // Allocate storage for render buffer object
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, this->RBO); // Attach MS render buffer object to framebuffer
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::POSTPROCESSOR: Failed to initialize MSFBO" << std::endl;
         
     // Also initialize the FBO/texture to blit multisampled color-buffer to; used for shader operations (for postprocessing effects)
     glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
-    this->Texture.Generate(width*2, height*2, NULL);
+    this->Texture.Generate(width, height, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->Texture.ID, 0); // Attach texture to framebuffer as its color attachment
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
@@ -79,7 +79,7 @@ void PostProcessor::EndRender()
     // Now resolve multisampled color-buffer into intermediate FBO to store to texture
     glBindFramebuffer(GL_READ_FRAMEBUFFER, this->MSFBO);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->FBO);
-    glBlitFramebuffer(0, 0, this->Width*2, this->Height*2, 0, 0, this->Width*2, this->Height*2, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, this->Width, this->Height, 0, 0, this->Width, this->Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0); // Binds both READ and WRITE framebuffer to default framebuffer
 }
 

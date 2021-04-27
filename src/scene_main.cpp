@@ -42,7 +42,7 @@ int MainScene::init()
         5000
     );
     Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), 
-        this->Width, this->Height);
+        this->engine->iFrameWidth, this->engine->iFrameHeight);
     
     // load Levels
     GameLevel one;

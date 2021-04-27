@@ -18,6 +18,8 @@ class Engine
 public:
     unsigned int iScreenWidth;
     unsigned int iScreenHeight;
+    int iFrameWidth;
+    int iFrameHeight;
     std::string windowTitle;
     GLFWwindow* window;
 
